@@ -281,15 +281,17 @@ MIT
 
 ## Netlify Deployment Information
 
-### Important Note on Static Exports
+### Server-Side Rendering with Next.js
 
-This project uses `next export` for static site generation, which has some limitations:
+This project uses server-side rendering with the Next.js App Router, which enables API Routes and Middleware functionality.
 
-> **⚠️ WARNING**: Using `next export` disables API Routes, Middleware, and other dynamic features of Next.js. 
+Initially, we attempted to use static export (`next export`), but this approach has limitations:
+
+> **⚠️ WARNING**: Using static export disables API Routes, Middleware, and other dynamic features of Next.js.
 >
 > For more information, see the [Next.js documentation on static exports](https://nextjs.org/docs/messages/api-routes-static-export).
 
-If you need API routes or server-side rendering, you should remove the `next export` command from the build process and configure Netlify to use the Next.js Runtime.
+Since this application requires API Routes for features like favorites, listings, and reservations, we've configured it for server-side rendering.
 
 ### Netlify Configuration
 
@@ -298,9 +300,12 @@ To deploy this project on Netlify:
 1. Connect your GitHub repository to Netlify
 2. Configure the following build settings:
    - Build command: `npm run netlify-build`
-   - Publish directory: `out`
+   - Publish directory: `.next`
 3. Add the required environment variables:
    - `DATABASE_URL`
    - `NEXTAUTH_SECRET`
    - `NEXTAUTH_URL`
    - Other environment variables as specified in `.env.example`
+4. Enable the Next.js Runtime (Netlify will detect and suggest this automatically)
+
+The `@netlify/plugin-nextjs` package is included in the project dependencies and will be used automatically by Netlify.

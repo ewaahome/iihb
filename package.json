@@ -17,7 +17,7 @@
     "vercel-build": "npm run prepare-vercel && node -e \"try { require('./scripts/vercel-deploy.js') } catch(e) { console.log('Skipping vercel-deploy.js: ' + e.message); }\" && node -e \"try { require('./scripts/vercel-build-info.js') } catch(e) { console.log('Skipping vercel-build-info.js: ' + e.message); }\" && npx prisma generate && next build",
     "export": "next export",
     "static-build": "next build && next export",
-    "netlify-build": "node netlify-prebuild.js && next build && next export",
+    "netlify-build": "node netlify-prebuild.js && next build",
     "db:test": "node scripts/test-db.js",
     "db:mongo-test": "node scripts/mongo-test.js",
     "prisma:studio": "prisma studio",

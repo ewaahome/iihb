@@ -1,6 +1,6 @@
 [build]
   command = "npm run netlify-build"
-  publish = "out"
+  publish = ".next"
   functions = "netlify/functions"
   [build.lifecycle]
     onBuild = "node netlify-prebuild.js"
