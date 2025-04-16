@@ -2,27 +2,69 @@
   command = "npm run build"
   publish = ".next"
   functions = "netlify/functions"
+  [build.lifecycle]
+    onBuild = "node netlify-prebuild.js"
 
 [build.environment]
-  NEXT_PUBLIC_BASE_URL = "https://eiwaahome.netlify.app"
-  NODE_VERSION = "18"
-  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "dzwkeydij"
-  NEXTAUTH_URL = "https://eiwaahome.netlify.app"
-  NEXTAUTH_SECRET = "eiwaahomeauthsecretkey2024"
-  DATABASE_URL = "mongodb+srv://finaleewa:finaleewa@finaleewa.7eytc2o.mongodb.net/finaleewa?retryWrites=true&w=majority&appName=finaleewa"
-  NODE_ENV = "production"
-  PRISMA_SCHEMA_PATH = "prisma/schema.prisma"
+  NODE_VERSION = "18.17.0"
+  NPM_VERSION = "9.6.7"
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.images]
+  compress = true
+
+[build.processing.html]
+  pretty_urls = true
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[[plugins]]
+  package = "netlify-plugin-prisma-provider"
+
+# Pre-build script to prepare environment and database
+[[plugins]]
+  package = "netlify-plugin-inline-functions-env"
+
+# Redirect all requests to Next.js
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/nextjs"
   status = 200
-  force = false
+  force = true
 
-[functions]
-  included_files = ["node_modules/.prisma/**/*.node", "prisma/schema.prisma", "schema.prisma", "prisma/**/*"]
-  node_bundler = "esbuild"
-  external_node_modules = ["@prisma/client", "prisma"] 
+# Cache control for static assets
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/image/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Optimize for performance and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' https:; object-src 'none'; frame-src 'self' https:;" 

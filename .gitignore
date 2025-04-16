@@ -54,3 +54,12 @@ Thumbs.db
 # Don't ignore app & pages directories
 !app/
 !pages/
+
+# Netlify
+.netlify/
+netlify/functions/server/
+.netlify.toml.backup
+.netlify.temp
+
+# Local Netlify folder
+.netlify
