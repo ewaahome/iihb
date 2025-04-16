@@ -8,8 +8,6 @@ const nextConfig = {
   output: 'export',
   distDir: 'out',
   images: {
-    loader: 'custom',
-    loaderFile: './app/image-loader.js',
     unoptimized: true,
     domains: [
       'res.cloudinary.com', 
