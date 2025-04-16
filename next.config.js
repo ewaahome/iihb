@@ -5,10 +5,10 @@ const nextConfig = {
     forceSwcTransforms: true,
   },
   swcMinify: true,
-  output: 'export',
+  output: process.env.NETLIFY ? undefined : 'export',
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    unoptimized: process.env.NETLIFY ? false : true,
     domains: [
       'res.cloudinary.com', 
       'avatars.githubusercontent.com',

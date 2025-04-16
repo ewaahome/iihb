@@ -1,7 +1,7 @@
 # Build settings
 [build]
-  command = "mkdir -p netlify/functions .netlify/functions-internal && npm run netlify:build"
-  publish = "out"
+  command = "npm run netlify:build"
+  publish = ".next"
   functions = "netlify/functions"
 
 # Environment variables
@@ -44,12 +44,6 @@
   to = "/.netlify/functions/auth/:splat"
   status = 200
 
-# SPA redirect - for client-side routing with drag & drop deployment
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Cache control for better performance
 [[headers]]
   for = "/static/*"
@@ -74,4 +68,8 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; frame-src https:; object-src 'none'" 
+    Content-Security-Policy = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; frame-src https:; object-src 'none'"
+
+# Add Next.js-specific handling
+[[plugins]]
+  package = "@netlify/plugin-nextjs" 
