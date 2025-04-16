@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "node -e \"const fs=require('fs');const path=require('path');const dir=path.join(process.cwd(),'prisma');if(!fs.existsSync(dir)){fs.mkdirSync(dir,{recursive:true});}const file=path.join(dir,'generate-client.js');if(!fs.existsSync(file)){fs.writeFileSync(file,'const {execSync}=require(\\'child_process\\');try{console.log(\\'Generating Prisma client...\\');execSync(\\'npx prisma generate\\',{stdio:\\'inherit\\'});}catch(e){console.log(\\'Error generating Prisma client, continuing anyway\\');}');}\" && npm run vercel-build",
+  "buildCommand": "node scripts/prepare-vercel.js && npm run vercel-build",
   "installCommand": "npm install --legacy-peer-deps",
   "outputDirectory": ".next",
   "env": {
