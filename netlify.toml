@@ -1,5 +1,5 @@
 [build]
-  command = "npm run netlify-build"
+  command = "node netlify-prebuild.js && npm run build && npm run export"
   publish = "out"
   functions = "netlify/functions"
   [build.lifecycle]

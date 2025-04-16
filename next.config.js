@@ -8,6 +8,8 @@ const nextConfig = {
   output: 'export',
   distDir: 'out',
   images: {
+    loader: 'custom',
+    loaderFile: './app/image-loader.js',
     unoptimized: true,
     domains: [
       'res.cloudinary.com', 
@@ -100,18 +102,6 @@ const nextConfig = {
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
     NEXT_PUBLIC_MAPBOX_STYLE: process.env.NEXT_PUBLIC_MAPBOX_STYLE
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        destination: '/:path*',
-      },
-      {
-        source: '/api/:path*',
-        destination: '/:path*',
-      },
-    ];
   },
 }
 

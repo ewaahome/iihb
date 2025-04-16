@@ -82,6 +82,47 @@ function createNetlifyFiles() {
   return true;
 }
 
+// Copy required files for static export
+function copyStaticFiles() {
+  const publicDir = path.join(process.cwd(), 'public');
+  const outDir = path.join(process.cwd(), 'out');
+  
+  if (fs.existsSync(publicDir)) {
+    // List all files in public directory
+    const files = fs.readdirSync(publicDir);
+    log(`Found ${files.length} files in public directory`);
+    
+    // Ensure out directory exists
+    if (!fs.existsSync(outDir)) {
+      fs.mkdirSync(outDir, { recursive: true });
+    }
+    
+    // Copy each file to out directory
+    files.forEach(file => {
+      const srcPath = path.join(publicDir, file);
+      const destPath = path.join(outDir, file);
+      
+      try {
+        // Only copy if file doesn't already exist in destination
+        if (!fs.existsSync(destPath)) {
+          // If it's a directory, copy recursively
+          if (fs.statSync(srcPath).isDirectory()) {
+            log(`Copying directory: ${file}`);
+            // Use execSync to use system copy command which handles directories better
+            execCommand(`cp -r "${srcPath}" "${outDir}"`);
+          } else {
+            // Copy file
+            log(`Copying file: ${file}`);
+            fs.copyFileSync(srcPath, destPath);
+          }
+        }
+      } catch (error) {
+        log(`Error copying ${file}: ${error.message}`);
+      }
+    });
+  }
+}
+
 // Main function to orchestrate pre-build tasks
 async function main() {
   log('Starting Netlify pre-build process');
@@ -91,6 +132,9 @@ async function main() {
   
   // Create Netlify required files
   createNetlifyFiles();
+  
+  // Copy static files
+  copyStaticFiles();
 
   // Run Next.js setup script if available
   if (fileExists('./setup-nextjs.js')) {
