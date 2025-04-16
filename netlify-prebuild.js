@@ -36,9 +36,32 @@ function fileExists(filePath) {
   return fs.existsSync(path.resolve(process.cwd(), filePath));
 }
 
+// Create necessary directories
+function ensureDirectories() {
+  const directories = [
+    path.join(process.cwd(), '.next'),
+    path.join(process.cwd(), 'netlify', 'functions'),
+    path.join(process.cwd(), '.netlify', 'functions-internal')
+  ];
+  
+  for (const dir of directories) {
+    if (!fs.existsSync(dir)) {
+      log(`Creating directory: ${dir}`);
+      fs.mkdirSync(dir, { recursive: true });
+    } else {
+      log(`Directory already exists: ${dir}`);
+    }
+  }
+  
+  return true;
+}
+
 // Main function to orchestrate pre-build tasks
 async function main() {
   log('Starting Netlify pre-build process');
+
+  // Ensure required directories exist first
+  ensureDirectories();
 
   // Run Next.js setup script if available
   if (fileExists('./setup-nextjs.js')) {

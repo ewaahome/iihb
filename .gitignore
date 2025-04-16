@@ -55,8 +55,13 @@ Thumbs.db
 !app/
 !pages/
 
+# Don't ignore Netlify function directories
+!netlify/functions/
+!.netlify/functions-internal/
+
 # Netlify
-.netlify/
+.netlify/*
+!.netlify/functions-internal/
 netlify/functions/server/
 .netlify.toml.backup
 .netlify.temp
