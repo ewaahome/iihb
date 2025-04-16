@@ -278,3 +278,29 @@ If you encounter issues with the Netlify deployment:
 ## License
 
 MIT
+
+## Netlify Deployment Information
+
+### Important Note on Static Exports
+
+This project uses `next export` for static site generation, which has some limitations:
+
+> **⚠️ WARNING**: Using `next export` disables API Routes, Middleware, and other dynamic features of Next.js. 
+>
+> For more information, see the [Next.js documentation on static exports](https://nextjs.org/docs/messages/api-routes-static-export).
+
+If you need API routes or server-side rendering, you should remove the `next export` command from the build process and configure Netlify to use the Next.js Runtime.
+
+### Netlify Configuration
+
+To deploy this project on Netlify:
+
+1. Connect your GitHub repository to Netlify
+2. Configure the following build settings:
+   - Build command: `npm run netlify-build`
+   - Publish directory: `out`
+3. Add the required environment variables:
+   - `DATABASE_URL`
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL`
+   - Other environment variables as specified in `.env.example`

@@ -6,7 +6,7 @@ const nextConfig = {
   },
   swcMinify: true,
   output: 'export',
-  distDir: 'out',
+  trailingSlash: true,
   images: {
     unoptimized: true,
     domains: [
@@ -88,7 +88,6 @@ const nextConfig = {
     
     return config;
   },
-  trailingSlash: true,
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

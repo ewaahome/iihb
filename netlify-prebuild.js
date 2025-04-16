@@ -82,6 +82,30 @@ function createNetlifyFiles() {
   return true;
 }
 
+// Copy files recursively in a cross-platform way
+function copyDirRecursively(src, dest) {
+  // Create destination directory if it doesn't exist
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  // Get all files in the source directory
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      // Recursively copy directories
+      copyDirRecursively(srcPath, destPath);
+    } else {
+      // Copy files
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 // Copy required files for static export
 function copyStaticFiles() {
   const publicDir = path.join(process.cwd(), 'public');
@@ -105,11 +129,10 @@ function copyStaticFiles() {
       try {
         // Only copy if file doesn't already exist in destination
         if (!fs.existsSync(destPath)) {
-          // If it's a directory, copy recursively
+          // If it's a directory, copy recursively using our custom function
           if (fs.statSync(srcPath).isDirectory()) {
             log(`Copying directory: ${file}`);
-            // Use execSync to use system copy command which handles directories better
-            execCommand(`cp -r "${srcPath}" "${outDir}"`);
+            copyDirRecursively(srcPath, destPath);
           } else {
             // Copy file
             log(`Copying file: ${file}`);
