@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "node scripts/prepare-vercel.js && npm run vercel-build",
+  "buildCommand": "npm run vercel-build",
   "installCommand": "npm install --legacy-peer-deps",
   "outputDirectory": ".next",
   "env": {

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-04-16T08:15:36.667Z",
+  "nodeVersion": "v22.14.0",
+  "npmVersion": "10.9.2",
+  "environment": "development",
+  "buildId": "local",
+  "region": "local",
+  "platform": "win32",
+  "arch": "x64",
+  "app": {
+    "name": "ewaahome",
+    "version": "0.1.0",
+    "dependencies": 27,
+    "devDependencies": 22
+  }
+}
