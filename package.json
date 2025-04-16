@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--no-warnings' next dev -p 3008",
     "alt-dev": "cross-env NODE_OPTIONS='--no-warnings' next dev -p 3009",
-    "build": "npx prisma generate && next build",
+    "build": "node prisma/generate-client.js && next build",
     "start": "next start",
     "lint": "next lint",
     "eslint:setup": "node scripts/setup-eslint.js",
@@ -75,6 +75,6 @@
     "typescript": "^5.4.5"
   },
   "prisma": {
-    "schema": "./prisma/schema.prisma"
+    "schema": "prisma/schema.prisma"
   }
 }
