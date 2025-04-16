@@ -43,11 +43,6 @@
       ]
     }
   ],
-  "functions": {
-    "api/**/*": {
-      "memory": 1024
-    }
-  },
   "git": {
     "deploymentEnabled": {
       "main": true

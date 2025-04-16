@@ -2,6 +2,7 @@
 
 منصة إيواء هوم هي نظام متكامل لحجز العقارات مكتوب باستخدام Next.js 13 App Router، مع واجهة مستخدم عربية. المشروع مبني على إطار عمل React، Tailwind CSS، Prisma ORM، وقاعدة بيانات PostgreSQL.
 
+![صورة للموقع](https://user-images.githubusercontent.com/23248726/229031522-64a49ad0-66f7-4ea8-94a8-f64a0bb56736.png)
 
 ## مميزات المشروع
 
