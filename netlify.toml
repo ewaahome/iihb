@@ -1,6 +1,6 @@
 # Build settings
 [build]
-  command = "node netlify-setup.js && node netlify-install-deps.js && npm run build"
+  command = "mkdir -p netlify/functions .netlify/functions-internal && npm run netlify:build"
   publish = "out"
   functions = "netlify/functions"
 
@@ -9,16 +9,6 @@
   NODE_VERSION = "18.17.0"
   NPM_VERSION = "9.6.7"
   PRISMA_SCHEMA_PATH = "./prisma/schema.prisma"
-
-# Plugin configurations
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-[[plugins]]
-  package = "netlify-plugin-inline-functions-env"
-  
-[[plugins]]
-  package = "netlify-plugin-prisma-provider"
 
 # Optimize processing
 [build.processing]
@@ -52,6 +42,12 @@
 [[redirects]]
   from = "/api/auth/*"
   to = "/.netlify/functions/auth/:splat"
+  status = 200
+
+# SPA redirect - for client-side routing with drag & drop deployment
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
 
 # Cache control for better performance

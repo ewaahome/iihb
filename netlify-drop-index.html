@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eiwaa Home</title>
+    <meta name="description" content="Your Home in Saudi Arabia">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #F43F5E;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #F43F5E;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-button {
+            background-color: #F43F5E;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #E11D48;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #F43F5E;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">إيواء هوم</div>
+            <div>
+                <button class="cta-button">تسجيل الدخول</button>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>أهلاً بك في إيواء هوم</h1>
+            <p>منصتك المثالية للعثور على المنزل المناسب في السعودية</p>
+            <button class="cta-button">استكشف العقارات</button>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <h2 class="feature-title">عقارات متميزة</h2>
+                <p>اكتشف مجموعة واسعة من العقارات المتميزة في جميع أنحاء المملكة العربية السعودية.</p>
+            </div>
+            <div class="feature-card">
+                <h2 class="feature-title">حجز سريع</h2>
+                <p>عملية حجز سهلة وسريعة تتيح لك الانتقال إلى منزلك الجديد بكل سهولة.</p>
+            </div>
+            <div class="feature-card">
+                <h2 class="feature-title">تجربة مميزة</h2>
+                <p>نقدم لك تجربة مميزة من البحث حتى الانتقال إلى منزلك الجديد.</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2024 إيواء هوم</p>
+    </footer>
+</body>
+</html> 

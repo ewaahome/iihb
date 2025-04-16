@@ -100,6 +100,8 @@ const nextConfig = {
     NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
     NEXT_PUBLIC_MAPBOX_STYLE: process.env.NEXT_PUBLIC_MAPBOX_STYLE
   },
+  // Exclude API routes from the static export
+  distDir: process.env.NETLIFY ? '.next' : undefined,
 }
 
 module.exports = nextConfig

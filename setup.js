@@ -4,6 +4,22 @@ const path = require('path');
 
 console.log('🔍 Running setup script to ensure Prisma schema is properly set up...');
 
+// Create necessary directories for Netlify
+if (process.env.NETLIFY === 'true') {
+  const directories = [
+    'netlify/functions',
+    '.netlify/functions-internal'
+  ];
+  
+  directories.forEach(dir => {
+    const dirPath = path.join(process.cwd(), dir);
+    if (!fs.existsSync(dirPath)) {
+      console.log(`📁 Creating directory for Netlify: ${dir}`);
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  });
+}
+
 // Check if schema.prisma exists in the root or prisma directory
 const rootSchemaPath = path.join(process.cwd(), 'schema.prisma');
 const prismaDir = path.join(process.cwd(), 'prisma');
@@ -49,6 +65,28 @@ model User {
   
   fs.writeFileSync(prismaSchemaPath, basicSchema);
   console.log('✅ Created basic schema.prisma in prisma directory');
+}
+
+// Create an empty Netlify function if we're in Netlify
+if (process.env.NETLIFY === 'true') {
+  const functionsDir = path.join(process.cwd(), 'netlify/functions');
+  const indexFunctionPath = path.join(functionsDir, 'index.js');
+  
+  if (!fs.existsSync(indexFunctionPath)) {
+    console.log('📄 Creating basic Netlify function...');
+    const basicFunction = `// Simple Netlify function
+exports.handler = async (event, context) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Hello from Netlify Functions!'
+    })
+  };
+};`;
+    
+    fs.writeFileSync(indexFunctionPath, basicFunction);
+    console.log('✅ Created basic Netlify function');
+  }
 }
 
 console.log('✅ Setup complete, Prisma schema is properly configured'); 
