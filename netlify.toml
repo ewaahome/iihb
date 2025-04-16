@@ -1,6 +1,6 @@
 [build]
   command = "npm run netlify-build"
-  publish = ".next"
+  publish = "out"
   functions = "netlify/functions"
   [build.lifecycle]
     onBuild = "node netlify-prebuild.js"
@@ -9,6 +9,7 @@
   NODE_VERSION = "18.17.0"
   NPM_VERSION = "9.6.7"
   PRISMA_SCHEMA_PATH = "./prisma/schema.prisma"
+  NEXT_PRIVATE_TARGET = "static"
 
 [build.processing]
   skip_processing = false
@@ -34,6 +35,18 @@
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/nextjs"
+  status = 200
+  force = true
+
+# Add SPA fallback configuration
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200
   force = true
 

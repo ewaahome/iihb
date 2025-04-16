@@ -56,12 +56,41 @@ function ensureDirectories() {
   return true;
 }
 
+// Create Netlify required files
+function createNetlifyFiles() {
+  // Create _redirects file in public directory
+  const publicDir = path.join(process.cwd(), 'public');
+  if (!fs.existsSync(publicDir)) {
+    log(`Creating public directory: ${publicDir}`);
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+  
+  // Write _redirects file
+  const redirectsPath = path.join(publicDir, '_redirects');
+  if (!fs.existsSync(redirectsPath)) {
+    log('Creating Netlify _redirects file');
+    fs.writeFileSync(redirectsPath, '/*    /index.html   200\n');
+  }
+  
+  // Create netlify.toml file in the output directory
+  const outDir = path.join(process.cwd(), 'out');
+  if (!fs.existsSync(outDir)) {
+    log(`Creating out directory: ${outDir}`);
+    fs.mkdirSync(outDir, { recursive: true });
+  }
+  
+  return true;
+}
+
 // Main function to orchestrate pre-build tasks
 async function main() {
   log('Starting Netlify pre-build process');
 
   // Ensure required directories exist first
   ensureDirectories();
+  
+  // Create Netlify required files
+  createNetlifyFiles();
 
   // Run Next.js setup script if available
   if (fileExists('./setup-nextjs.js')) {
