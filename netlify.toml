@@ -1,0 +1,33 @@
+[build]
+  command = "npm run netlify-build"
+  publish = ".next"
+  environment = { PRISMA_SCHEMA_PATH = "./prisma/schema.prisma" }
+
+[build.environment]
+  NEXT_PUBLIC_BASE_URL = "https://your-site-name.netlify.app"
+  NODE_VERSION = "18"
+  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "eiwaahome"
+  NEXTAUTH_URL = "https://eiwaahome.netlify.app"
+  NEXTAUTH_SECRET = "eiwaahomeauthsecretkey2024"
+  DATABASE_URL = "mongodb+srv://your_username:your_password@your_cluster.mongodb.net/your_database?retryWrites=true&w=majority"
+  GOOGLE_CLIENT_ID = "your_google_client_id"
+  GOOGLE_CLIENT_SECRET = "your_google_client_secret"
+  GITHUB_ID = "your_github_client_id"
+  GITHUB_SECRET = "your_github_client_secret"
+  NODE_ENV = "production"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  query = {path = ":path"}
+  conditions = {Language = ["ar", "en"]}
+
+[functions]
+  included_files = ["node_modules/.prisma/**/*.node", "prisma/schema.prisma", "prisma/**/*"]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client", "prisma"] 

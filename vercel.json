@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "node -e \"const fs=require('fs');const path=require('path');const dir=path.join(process.cwd(),'prisma');if(!fs.existsSync(dir)){fs.mkdirSync(dir,{recursive:true});}const file=path.join(dir,'generate-client.js');if(!fs.existsSync(file)){fs.writeFileSync(file,'const {execSync}=require(\\'child_process\\');try{console.log(\\'Generating Prisma client...\\');execSync(\\'npx prisma generate\\',{stdio:\\'inherit\\'});}catch(e){console.log(\\'Error generating Prisma client, continuing anyway\\');}');}\" && npm run vercel-build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": ".next",
+  "env": {
+    "DATABASE_URL": "mongodb+srv://finaleewa:finaleewa@finaleewa.7eytc2o.mongodb.net/finaleewa?retryWrites=true&w=majority&appName=finaleewa",
+    "NEXTAUTH_SECRET": "eiwaahomeauthsecretkey2024",
+    "NEXTAUTH_URL": "https://cc1-git-main-ewaahomes-projects.vercel.app",
+    "NEXT_PUBLIC_NEXTAUTH_URL": "https://cc1-git-main-ewaahomes-projects.vercel.app",
+    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME": "dzwkeydij",
+    "CLOUDINARY_URL": "cloudinary://261241242864329:KS0GJUBWc5m5gyMXLC2yPPozVuA@dzwkeydij",
+    "NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET": "airbnb_upload",
+    "CLOUDINARY_API_KEY": "261241242864329",
+    "CLOUDINARY_API_SECRET": "KS0GJUBWc5m5gyMXLC2yPPozVuA",
+    "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoiZXdhYWhvbWUiLCJhIjoiY204ZGpranNkMWs4cTJtczU0dmwxaXlpdiJ9.0xFsZgp69DtYp5iwQh9Ivw",
+    "NEXT_PUBLIC_MAPBOX_STYLE": "mapbox://styles/mapbox/streets-v11",
+    "ESLINT_CONFIG_FILE": ".eslintrc.vercel.js"
+  },
+  "regions": ["iad1"],
+  "public": true,
+  "github": {
+    "silent": true
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+} 

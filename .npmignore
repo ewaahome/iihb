@@ -1,0 +1,19 @@
+# Don't ignore these important files
+!prisma/
+!prisma/schema.prisma
+!prisma/generate-client.js
+!scripts/
+!scripts/prisma-setup.js
+!scripts/vercel-deploy.js
+!scripts/vercel-build-info.js
+
+# Ignore large directories
+node_modules/
+.next/
+.vercel/
+
+# Ignore development files
+*.log
+.git/
+.github/
+.vscode/ 
