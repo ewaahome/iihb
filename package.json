@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--no-warnings' next dev -p 3008",
     "alt-dev": "cross-env NODE_OPTIONS='--no-warnings' next dev -p 3009",
-    "build": "node setup.js && node netlify-prebuild.js && node setup-nextjs.js && node -e \"console.log('🚀 Starting Prisma client generation...'); const { execSync } = require('child_process'); try { execSync('npx prisma generate', { stdio: 'inherit' }); console.log('✅ Prisma client generated successfully'); } catch (error) { console.error('❌ Error generating Prisma client:', error.message); process.exit(1); }\" && next build",
+    "build": "node setup.js && next build",
     "start": "next start",
     "lint": "next lint",
     "eslint:setup": "node scripts/setup-eslint.js",
