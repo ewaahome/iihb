@@ -40,11 +40,7 @@ fs.mkdirSync(dropDir, { recursive: true });
 // Create _redirects file for SPA routing - THE MOST IMPORTANT FILE
 console.log('📄 Creating _redirects file...');
 // This specific format is crucial for Netlify SPA routing
-const redirectsContent = `/* /index.html 200
-/index.html / 301
-/*/index.html /:splat 301
-/index /
-404 /index.html 200`;
+const redirectsContent = `/*    /index.html   200`;
 fs.writeFileSync(path.join(dropDir, '_redirects'), redirectsContent);
 
 // Create _headers file for caching and security
@@ -67,9 +63,10 @@ fs.writeFileSync(path.join(dropDir, '_headers'), headersContent);
 
 // Create netlify.toml with minimal configuration
 console.log('📄 Creating netlify.toml file...');
-const netlifyTomlContent = `# SPA configuration for Netlify
+const netlifyTomlContent = `# Static site configuration for Netlify Drop
 [build]
   publish = "."
+  command = "echo 'No build command needed for static site'"
 
 [[redirects]]
   from = "/*"
@@ -83,11 +80,23 @@ const netlifyTomlContent = `# SPA configuration for Netlify
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Default 404 configuration
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 404`;
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"`;
 fs.writeFileSync(path.join(dropDir, 'netlify.toml'), netlifyTomlContent);
 
 // Create a minimal package.json file
