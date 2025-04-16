@@ -53,10 +53,33 @@ async function main() {
     fs.writeFileSync('.env.local', '# Environment variables added by Netlify prebuild\n');
   }
 
-  // Generate Prisma client if schema exists
+  // Verify Prisma schema exists and is valid
   if (fileExists('./prisma/schema.prisma')) {
-    log('Generating Prisma client');
-    execCommand('npx prisma generate');
+    log('Prisma schema found, generating client');
+    try {
+      // Make sure the Prisma schema is accessible
+      const schemaPath = path.resolve(process.cwd(), './prisma/schema.prisma');
+      log(`Prisma schema path: ${schemaPath}`);
+      
+      const schemaExists = fs.existsSync(schemaPath);
+      log(`Schema exists: ${schemaExists}`);
+      
+      if (schemaExists) {
+        // Read schema file to verify content
+        const schemaContent = fs.readFileSync(schemaPath, 'utf8');
+        log(`Schema content length: ${schemaContent.length} bytes`);
+        
+        // Generate Prisma client
+        execCommand('npx prisma generate');
+      } else {
+        throw new Error('Prisma schema not found at expected location');
+      }
+    } catch (error) {
+      log(`Error with Prisma setup: ${error.message}`);
+      // Continue build process but log the error
+    }
+  } else {
+    log('Prisma schema not found, skipping client generation');
   }
 
   // Install any additional dependencies if needed

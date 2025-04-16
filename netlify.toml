@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run netlify-build"
   publish = ".next"
   functions = "netlify/functions"
   [build.lifecycle]
@@ -8,6 +8,7 @@
 [build.environment]
   NODE_VERSION = "18.17.0"
   NPM_VERSION = "9.6.7"
+  PRISMA_SCHEMA_PATH = "./prisma/schema.prisma"
 
 [build.processing]
   skip_processing = false
@@ -28,9 +29,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-[[plugins]]
-  package = "netlify-plugin-prisma-provider"
 
 # Pre-build script to prepare environment and database
 [[plugins]]
