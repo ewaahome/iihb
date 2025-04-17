@@ -5,7 +5,6 @@ const nextConfig = {
     forceSwcTransforms: true,
   },
   swcMinify: true,
-  output: process.env.NETLIFY ? undefined : 'export',
   trailingSlash: true,
   images: {
     unoptimized: process.env.NETLIFY ? false : true,
