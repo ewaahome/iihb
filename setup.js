@@ -1,11 +1,22 @@
 // Setup script for Vercel deployment
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 console.log('🚀 Setting up project for Vercel deployment...');
 
+// Run the cleanup script first if it exists
+if (fs.existsSync('cleanup-config.js')) {
+  console.log('🧹 Running cleanup script...');
+  try {
+    require('./cleanup-config.js');
+  } catch (error) {
+    console.warn('⚠️ Error running cleanup script:', error.message);
+  }
+}
+
 // Ensure directories exist
-const dirs = ['prisma', 'scripts', 'app'];
+const dirs = ['prisma', 'scripts', 'app', 'app/api'];
 dirs.forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -215,5 +226,52 @@ if (!fs.existsSync('postcss.config.js')) {
   fs.writeFileSync('postcss.config.js', postcssConfig);
   console.log('📄 Created postcss.config.js file');
 }
+
+// Create a basic API route for Next.js App Router
+const apiRoutePath = path.join('app', 'api', 'route.js');
+if (!fs.existsSync(apiRoutePath)) {
+  const apiContent = `// Route handler for App Router
+export async function GET(request) {
+  return new Response(JSON.stringify({ 
+    message: 'API is working' 
+  }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}`;
+  
+  fs.writeFileSync(apiRoutePath, apiContent);
+  console.log('📄 Created app/api/route.js file');
+}
+
+// Create vercel.json with correct configuration
+const vercelJsonPath = path.join(process.cwd(), 'vercel.json');
+const vercelConfig = {
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": ".next",
+  "env": {
+    "DATABASE_URL": "mongodb+srv://finaleewa:finaleewa@finaleewa.7eytc2o.mongodb.net/finaleewa?retryWrites=true&w=majority&appName=finaleewa",
+    "NEXTAUTH_SECRET": "eiwaahomeauthsecretkey2024",
+    "NEXTAUTH_URL": "https://cc1-git-main-ewaahomes-projects.vercel.app",
+    "NEXT_PUBLIC_NEXTAUTH_URL": "https://cc1-git-main-ewaahomes-projects.vercel.app",
+    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME": "dzwkeydij",
+    "CLOUDINARY_URL": "cloudinary://261241242864329:KS0GJUBWc5m5gyMXLC2yPPozVuA@dzwkeydij",
+    "NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET": "airbnb_upload",
+    "CLOUDINARY_API_KEY": "261241242864329",
+    "CLOUDINARY_API_SECRET": "KS0GJUBWc5m5gyMXLC2yPPozVuA",
+    "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoiZXdhYWhvbWUiLCJhIjoiY204ZGpranNkMWs4cTJtczU0dmwxaXlpdiJ9.0xFsZgp69DtYp5iwQh9Ivw",
+    "NEXT_PUBLIC_MAPBOX_STYLE": "mapbox://styles/mapbox/streets-v11",
+    "ESLINT_CONFIG_FILE": ".eslintrc.vercel.js",
+    "PRISMA_SCHEMA_PATH": "./prisma/schema.prisma"
+  }
+};
+
+fs.writeFileSync(vercelJsonPath, JSON.stringify(vercelConfig, null, 2));
+console.log('📄 Updated vercel.json with clean configuration');
 
 console.log('✅ Setup complete!'); 
