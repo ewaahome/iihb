@@ -15,6 +15,14 @@ if (fs.existsSync('cleanup-config.js')) {
   }
 }
 
+// Save original page.tsx content if it exists
+let originalPageContent = null;
+const appPagePath = path.join('app', 'page.tsx');
+if (fs.existsSync(appPagePath)) {
+  originalPageContent = fs.readFileSync(appPagePath, 'utf8');
+  console.log('📄 Saved original page.tsx content');
+}
+
 // Ensure directories exist
 const dirs = ['prisma', 'scripts', 'app', 'app/api'];
 dirs.forEach(dir => {
@@ -23,6 +31,84 @@ dirs.forEach(dir => {
     console.log(`📁 Created ${dir} directory`);
   }
 });
+
+// Now restore the original page.tsx if we had saved it
+if (originalPageContent) {
+  fs.writeFileSync(appPagePath, originalPageContent);
+  console.log('📄 Restored original page.tsx content');
+} else if (!fs.existsSync(appPagePath)) {
+  // Only create a new page.tsx if it doesn't exist
+  const fullHomePage = `import Container from "@/app/components/Container";
+import ListingCard from "@/app/components/listings/ListingCard";
+import EmptyState from "@/app/components/EmptyState";
+import CitiesSection from "@/app/components/CitiesSection";
+import Categories from "@/app/components/navbar/Categories";
+
+import getListings, { 
+  IListingsParams
+} from "@/app/actions/getListings";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import ClientOnly from "./components/ClientOnly";
+
+// إضافة خاصية revalidate لضمان تحديث البيانات
+export const revalidate = 0;
+
+interface HomeProps {
+  searchParams: IListingsParams
+};
+
+const Home = async ({ searchParams }: HomeProps) => {
+  const listings = await getListings(searchParams);
+  const currentUser = await getCurrentUser();
+
+  if (listings.length === 0) {
+    return (
+      <ClientOnly>
+        <EmptyState showReset />
+      </ClientOnly>
+    );
+  }
+
+  return (
+    <ClientOnly>
+      <div className="pb-10">
+        <CitiesSection />
+        <div className="pt-4">
+          <Categories />
+        </div>
+      </div>
+      <Container>
+        <div 
+          className="
+            pt-10
+            grid 
+            grid-cols-1 
+            sm:grid-cols-2 
+            md:grid-cols-3 
+            lg:grid-cols-4
+            xl:grid-cols-5
+            2xl:grid-cols-6
+            gap-8
+          "
+        >
+          {listings.map((listing: any) => (
+            <ListingCard
+              currentUser={currentUser}
+              key={listing.id}
+              data={listing}
+            />
+          ))}
+        </div>
+      </Container>
+    </ClientOnly>
+  )
+}
+
+export default Home;`;
+  
+  fs.writeFileSync(appPagePath, fullHomePage);
+  console.log('📄 Created full homepage in app/page.tsx file');
+}
 
 // Ensure prisma schema exists
 const schemaPath = path.join('prisma', 'schema.prisma');
@@ -117,20 +203,6 @@ export default function RootLayout({
   
   fs.writeFileSync(appLayoutPath, layoutContent);
   console.log('📄 Created app/layout.tsx file');
-}
-
-const appPagePath = path.join('app', 'page.tsx');
-if (!fs.existsSync(appPagePath)) {
-  const pageContent = `export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Welcome to Ewaa Home</h1>
-    </main>
-  );
-}`;
-  
-  fs.writeFileSync(appPagePath, pageContent);
-  console.log('📄 Created app/page.tsx file');
 }
 
 const appGlobalsPath = path.join('app', 'globals.css');
