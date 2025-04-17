@@ -16,7 +16,7 @@
     "lint": "next lint",
     "eslint:setup": "node scripts/setup-eslint.js",
     "postinstall": "node -e \"try { require('./prisma/generate-client.js') } catch(e) { console.log('Falling back to direct generation'); try { require('@prisma/client'); } catch(e) { console.log('Continuing anyway'); } }\"",
-    "vercel-build": "node cleanup-config.js && node setup.js && node fix-homepage.js && npx prisma generate && next build",
+    "vercel-build": "node cleanup-config.js && node setup.js && node fix-component-imports.js && npx prisma generate && next build",
     "export": "next export",
     "static-build": "next build && next export",
     "netlify-build": "node netlify-prebuild.js && NETLIFY_NEXT_PLUGIN_SKIP=true next build",

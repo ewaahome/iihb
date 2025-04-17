@@ -17,6 +17,7 @@
     "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoiZXdhYWhvbWUiLCJhIjoiY204ZGpranNkMWs4cTJtczU0dmwxaXlpdiJ9.0xFsZgp69DtYp5iwQh9Ivw",
     "NEXT_PUBLIC_MAPBOX_STYLE": "mapbox://styles/mapbox/streets-v11",
     "ESLINT_CONFIG_FILE": ".eslintrc.vercel.js",
-    "PRISMA_SCHEMA_PATH": "./prisma/schema.prisma"
+    "PRISMA_SCHEMA_PATH": "./prisma/schema.prisma",
+    "NEXT_PUBLIC_DEMO_MODE": "true"
   }
 } 
