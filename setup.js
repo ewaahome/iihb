@@ -1,48 +1,27 @@
-// Setup script to ensure schema.prisma is in the correct location
+// Setup script for Vercel deployment
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔍 Running setup script to ensure Prisma schema is properly set up...');
+console.log('🚀 Setting up project for Vercel deployment...');
 
-// Create necessary directories for Netlify
-if (process.env.NETLIFY === 'true') {
-  const directories = [
-    'netlify/functions',
-    '.netlify/functions-internal'
-  ];
-  
-  directories.forEach(dir => {
-    const dirPath = path.join(process.cwd(), dir);
-    if (!fs.existsSync(dirPath)) {
-      console.log(`📁 Creating directory for Netlify: ${dir}`);
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-  });
-}
+// Ensure directories exist
+const dirs = ['prisma', 'scripts'];
+dirs.forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`📁 Created ${dir} directory`);
+  }
+});
 
-// Check if schema.prisma exists in the root or prisma directory
-const rootSchemaPath = path.join(process.cwd(), 'schema.prisma');
-const prismaDir = path.join(process.cwd(), 'prisma');
-const prismaSchemaPath = path.join(prismaDir, 'schema.prisma');
+// Ensure prisma schema exists
+const schemaPath = path.join('prisma', 'schema.prisma');
+if (!fs.existsSync(schemaPath)) {
+  const schemaContent = `// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Create prisma directory if it doesn't exist
-if (!fs.existsSync(prismaDir)) {
-  console.log('📁 Creating prisma directory...');
-  fs.mkdirSync(prismaDir, { recursive: true });
-  console.log('✅ Created prisma directory');
-}
-
-// Copy schema from root to prisma directory if needed
-if (fs.existsSync(rootSchemaPath)) {
-  console.log('📄 Found schema.prisma in root, copying to prisma directory...');
-  fs.copyFileSync(rootSchemaPath, prismaSchemaPath);
-  console.log('✅ Copied schema.prisma to prisma directory');
-} else if (!fs.existsSync(prismaSchemaPath)) {
-  // Create a basic schema if none exists
-  console.log('⚠️ No schema.prisma found, creating basic schema...');
-  const basicSchema = `// Basic Prisma schema for MongoDB
 generator client {
   provider        = "prisma-client-js"
+  previewFeatures = []
   binaryTargets   = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -63,30 +42,47 @@ model User {
   updatedAt      DateTime  @updatedAt
 }`;
   
-  fs.writeFileSync(prismaSchemaPath, basicSchema);
-  console.log('✅ Created basic schema.prisma in prisma directory');
+  fs.writeFileSync(schemaPath, schemaContent);
+  console.log('📄 Created schema.prisma file');
 }
 
-// Create an empty Netlify function if we're in Netlify
-if (process.env.NETLIFY === 'true') {
-  const functionsDir = path.join(process.cwd(), 'netlify/functions');
-  const indexFunctionPath = path.join(functionsDir, 'index.js');
+// Ensure prisma/generate-client.js exists
+const generateClientPath = path.join('prisma', 'generate-client.js');
+if (!fs.existsSync(generateClientPath)) {
+  const generateClientContent = `// Script to generate Prisma client
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+console.log('🚀 Starting Prisma client generation...');
+
+// Check if schema.prisma exists in the prisma directory
+const schemaPrismaPath = path.join(__dirname, 'schema.prisma');
+const rootSchemaPrismaPath = path.join(process.cwd(), 'schema.prisma');
+
+if (!fs.existsSync(schemaPrismaPath) && fs.existsSync(rootSchemaPrismaPath)) {
+  console.log('⚠️ schema.prisma not found in prisma directory, copying from root...');
+  fs.copyFileSync(rootSchemaPrismaPath, schemaPrismaPath);
+  console.log('✅ schema.prisma copied to prisma directory');
+}
+
+try {
+  console.log('📊 Generating Prisma client...');
+  execSync('npx prisma generate --schema=prisma/schema.prisma', { stdio: 'inherit' });
+  console.log('✅ Prisma client generated successfully');
+} catch (error) {
+  console.error('❌ Error generating Prisma client:', error.message);
+  process.exit(0); // Don't fail the build
+}`;
   
-  if (!fs.existsSync(indexFunctionPath)) {
-    console.log('📄 Creating basic Netlify function...');
-    const basicFunction = `// Simple Netlify function
-exports.handler = async (event, context) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Hello from Netlify Functions!'
-    })
-  };
-};`;
-    
-    fs.writeFileSync(indexFunctionPath, basicFunction);
-    console.log('✅ Created basic Netlify function');
-  }
+  fs.writeFileSync(generateClientPath, generateClientContent);
+  console.log('📄 Created generate-client.js file');
 }
 
-console.log('✅ Setup complete, Prisma schema is properly configured'); 
+// Ensure .env file exists with DATABASE_URL
+if (!fs.existsSync('.env')) {
+  fs.writeFileSync('.env', 'DATABASE_URL="mongodb+srv://finaleewa:finaleewa@finaleewa.7eytc2o.mongodb.net/finaleewa?retryWrites=true&w=majority&appName=finaleewa"\n');
+  console.log('📄 Created .env file with DATABASE_URL');
+}
+
+console.log('✅ Setup complete!'); 
