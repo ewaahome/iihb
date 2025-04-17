@@ -5,7 +5,7 @@ const path = require('path');
 console.log('🚀 Setting up project for Vercel deployment...');
 
 // Ensure directories exist
-const dirs = ['prisma', 'scripts'];
+const dirs = ['prisma', 'scripts', 'app'];
 dirs.forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -79,10 +79,141 @@ try {
   console.log('📄 Created generate-client.js file');
 }
 
+// Ensure app directory has necessary files for Next.js
+const appLayoutPath = path.join('app', 'layout.tsx');
+if (!fs.existsSync(appLayoutPath)) {
+  const layoutContent = `import './globals.css';
+import { Inter } from 'next/font/google';
+
+export const metadata = {
+  title: 'Ewaa Home',
+  description: 'Vacation Homes & Apartment Rentals',
+};
+
+const inter = Inter({ subsets: ['latin'] });
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}`;
+  
+  fs.writeFileSync(appLayoutPath, layoutContent);
+  console.log('📄 Created app/layout.tsx file');
+}
+
+const appPagePath = path.join('app', 'page.tsx');
+if (!fs.existsSync(appPagePath)) {
+  const pageContent = `export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1 className="text-4xl font-bold">Welcome to Ewaa Home</h1>
+    </main>
+  );
+}`;
+  
+  fs.writeFileSync(appPagePath, pageContent);
+  console.log('📄 Created app/page.tsx file');
+}
+
+const appGlobalsPath = path.join('app', 'globals.css');
+if (!fs.existsSync(appGlobalsPath)) {
+  const cssContent = `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}`;
+  
+  fs.writeFileSync(appGlobalsPath, cssContent);
+  console.log('📄 Created app/globals.css file');
+}
+
 // Ensure .env file exists with DATABASE_URL
 if (!fs.existsSync('.env')) {
   fs.writeFileSync('.env', 'DATABASE_URL="mongodb+srv://finaleewa:finaleewa@finaleewa.7eytc2o.mongodb.net/finaleewa?retryWrites=true&w=majority&appName=finaleewa"\n');
   console.log('📄 Created .env file with DATABASE_URL');
+}
+
+// Create the scripts/vercel-build-info.js file if it doesn't exist
+const buildInfoPath = path.join('scripts', 'vercel-build-info.js');
+if (!fs.existsSync(buildInfoPath)) {
+  const buildInfoContent = `// Script to print environment information during Vercel build
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+console.log('\\n🔍 Gathering build information for Vercel deployment...');
+
+// Build information
+const buildInfo = {
+  timestamp: new Date().toISOString(),
+  nodeVersion: process.version,
+  npmVersion: execSync('npm --version').toString().trim(),
+  environment: process.env.VERCEL_ENV || 'development',
+  buildId: process.env.VERCEL_BUILD_ID || 'local',
+  region: process.env.VERCEL_REGION || 'local',
+  platform: process.platform,
+  arch: process.arch
+};
+
+// Write build info to a file
+const buildInfoPath = path.join(process.cwd(), '.vercel-build-info.json');
+fs.writeFileSync(buildInfoPath, JSON.stringify(buildInfo, null, 2));
+
+console.log('✅ Build information collected successfully');
+console.log('🏗️ Proceeding with Next.js build...\\n');
+
+// This is just for build information, so exit successfully
+process.exit(0);`;
+  
+  fs.writeFileSync(buildInfoPath, buildInfoContent);
+  console.log('📄 Created scripts/vercel-build-info.js file');
+}
+
+// Create a minimal tailwind.config.js if it doesn't exist
+if (!fs.existsSync('tailwind.config.js')) {
+  const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}`;
+  
+  fs.writeFileSync('tailwind.config.js', tailwindConfig);
+  console.log('📄 Created tailwind.config.js file');
+}
+
+// Create a minimal postcss.config.js if it doesn't exist
+if (!fs.existsSync('postcss.config.js')) {
+  const postcssConfig = `module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}`;
+  
+  fs.writeFileSync('postcss.config.js', postcssConfig);
+  console.log('📄 Created postcss.config.js file');
 }
 
 console.log('✅ Setup complete!'); 
